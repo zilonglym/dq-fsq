@@ -40,6 +40,7 @@ public class RealMachineWeChatTest {
         capabilities.setCapability("fastReset", "false");
         capabilities.setCapability("fullReset", "false");
         capabilities.setCapability("noReset", "true");
+        capabilities.setCapability("newCommandTimeout", "300");
         //Appium版本1.3.3以上,设置允许输入中文
         capabilities.setCapability("unicodeKeyboard", "True"); //使用unicodeKeyboard的编码方式来发送字符串
         capabilities.setCapability("resetKeyboard", "True");   //将自带键盘给隐藏起来
@@ -79,7 +80,7 @@ public class RealMachineWeChatTest {
         
         try {
 			//搜索定位
-        	Thread.sleep(4000);
+        	Thread.sleep(10000);
 			driver.findElementByXPath("//android.widget.TextView[@content-desc='搜索']").click();
 			Thread.sleep(500);
 			//输入
@@ -108,41 +109,87 @@ public class RealMachineWeChatTest {
 			
 			
 			Thread.sleep(1000);
-			System.out.println(driver.getPageSource());
+			//System.out.println(driver.getPageSource());
 			//driver.context("WEBVIEW_com.tencent.mm:tools");
 			//切换到webview
 			switchtoWeb();
 			
-			//简易咨询
+//			//简易咨询//*/div[@class='main_content ']/*/*/p
+//			////*/div[@class='main_content ']/*/*/a[@class='weui-btn module-1']
+////			Thread.sleep(1000);
+////			driver.findElementByXPath("//*[contains(@href, 'order')]").click();
+//			driver.findElementByXPath("//*/div[@class='main_content ']/*/*/a[@class='weui-btn module-1']").click();
+////			driver.findElementByXPath("/html/body/div[3]/div[1]/div[1]/p").click();
+//			System.out.println("点击简易咨询成功");
 //			Thread.sleep(1000);
-			driver.findElementByXPath("//*[contains(@href, 'order')]").click();
-//			driver.findElementByXPath("/html/body/div[3]/div[1]/div[1]/p").click();
-			System.out.println("点击简易咨询成功");
-			Thread.sleep(1000);
-			navigate(-1);
-			Thread.sleep(1000);
+//			navigate(-1);
+//			Thread.sleep(1000);
 			
 			//病历咨询
+			Thread.sleep(5000);
 			//switchtoWeb();
-			driver.findElementByXPath("//*[contains(@href, 'friend')]").click();
+			////*/div[@class='main_content ']/*/*/a[@class='weui-btn module-2']
+//			driver.findElementByXPath("//*[contains(@href, 'friend')]").click(); //page里有多个隐藏api
+			driver.findElementByXPath("//*/div[@class='main_content ']/*/*/a[@class='weui-btn module-2']").click();
+			//driver.findElementByLinkText("病历咨询").click();//超文本链接获取
+			//上面这句没法定位
+			//driver.findElementByXPath("//*/div[@class='main_content ']/*/*/a[contains(@href, 'friend')]").click();
 			System.out.println("点击病历咨询成功");
-			Thread.sleep(1000);
-			navigate(-1);
-			Thread.sleep(1000);
+			Thread.sleep(10000);
+			//navigate(-1);
+			//Thread.sleep(1000);
+			//页面跳转后重新获取上下文
 			
-			//远程会诊
-			driver.findElementByXPath("//*[contains(@href, 'remote')]").click();
-			System.out.println("点击远程会诊成功");
-			Thread.sleep(1000);
-			navigate(-1);
-			Thread.sleep(1000);
+			System.out.println(driver.getContext());
+			Set<String> contextNames = driver.getContextHandles();
+	        for (String contextName : contextNames) {
+	        	System.out.println(contextName); 
+//	        	if(contextName.contains("tools")){
+//	        		driver.context(contextName);
+//	        	}
+	         }
+	        //driver.context("WEBVIEW_com.tencent.mm:tools");
+	        //System.out.println(driver.getPageSource());//此处无法获取PageCode
+	        
+	        //clickScreen100(30,30);
+	        
+//			List<AndroidElement> orderList1 = driver.findElementsByXPath("//*/div[@class='main_content ']/div[@class='weui-form-preview']");
+//			if(orderList1.size()<1){
+//				System.out.println("无病历咨询记录1");
+////				return ;
+//			}
 			
-			//患者管理
-			driver.findElementByXPath("//*[contains(@href, 'patient')]").click();
-			System.out.println("点击患者管理成功");
-			Thread.sleep(1000);
-			navigate(-1);
-			Thread.sleep(1000);
+			List<AndroidElement> orderList2 = driver.findElementsByClassName("weui-form-preview__hd order_type_online");
+			if(orderList2.size()<1){
+				System.out.println("无病历咨询记录2");
+//				return ;
+			}
+			
+			for (AndroidElement androidElement : textentranceList) {
+				if(androidElement.getText().equalsIgnoreCase("问答咨询")){						
+					androidElement.click();
+					break;
+				}
+			}
+			
+//			//远程会诊
+//			////*/div[@class='main_content ']/*/*/a[@class='weui-btn module-4']
+////			driver.findElementByXPath("//*[contains(@href, 'remote')]").click();
+//			Thread.sleep(5000);
+//			driver.findElementByXPath("//*/div[@class='main_content ']/*/*/a[@class='weui-btn module-4']").click();
+//			System.out.println("点击远程会诊成功");
+//			Thread.sleep(5000);
+//			navigate(-1);
+//			Thread.sleep(5000);
+			
+//			//患者管理
+//			////*/div[@class='main_content ']/*/*/a[@class='weui-btn module-5']
+////			driver.findElementByXPath("//*[contains(@href, 'patient')]").click();
+//			driver.findElementByXPath("//*/div[@class='main_content ']/*/*/a[@class='weui-btn module-5']").click();
+//			System.out.println("点击患者管理成功");
+//			Thread.sleep(5000);
+//			navigate(-1);
+//			Thread.sleep(1000);
 			
 			
 		} catch (Exception e) {
@@ -245,12 +292,16 @@ public class RealMachineWeChatTest {
     }
 	    
 	/**
-	 * WebView navigate 操作    
+	 * WebView navigate 操作    /html/body/div[1]/div[1]/a
 	 */
     public static void navigate(int action){
     	switch(action){
     	case-1:
+    		///html/body/div[1]/div[1]/a
+    		//driver.findElementByXPath("//*/div[@class='weui-flex app-header']/div[@class='weui-flex__item']/a[@href='/wx/11/service']").click();
+    		//driver.findElementByClassName("tool-icon fa fa-home").click();
     		driver.navigate().back();   // 后退
+    		switchtoWeb();
     		break;
     	case 1:
     		driver.navigate().forward();// 前进
