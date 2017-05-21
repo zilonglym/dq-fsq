@@ -2,7 +2,7 @@
 ## Appium Api 文档
 https://testerhome.com/topics/3144
 
-##软件安装月环境配置篇：
+##软件安装月环境配置篇：##
 1）安装node.js安装
 http://nodejs.cn/download/
 http://www.runoob.com/nodejs/nodejs-install-setup.html
@@ -44,7 +44,7 @@ adb devices
 打开后，点击Device Screenshot，就能刷新出手机的界面，并且能展示定位
 
 
-##遇到及解决问题：
+##遇到及解决问题：##
 1.selenium-Java与Stand的版本不一致导致一些怪异的问题
 2.Appium无法输入中文
 //Appium版本1.3.3以上,设置允许输入中文
